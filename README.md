@@ -39,7 +39,7 @@ Sixty-nine tailored applications, twenty first interviews, and one signed contra
 
 ## What this is
 
-A structured workflow that turns Claude Code into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**. For a UK job search, start with the shipped country-agnostic portals (`linkedin-search`, `freehire-search`) and add UK boards (Indeed UK, Reed, Totaljobs, CV-Library, Adzuna, Find a Job, Civil Service Jobs, NHS Jobs) via `/add-portal`. The Danish portal CLIs in this repo are opt-in demo integrations of the same pattern.
+A structured workflow that turns Claude Code into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**. For a UK job search, start with the shipped country-agnostic portals (`linkedin-search`, `freehire-search`) and add UK boards (Indeed UK, Reed, Totaljobs, CV-Library, Adzuna) via `/add-portal`. The Danish portal CLIs in this repo are opt-in demo integrations of the same pattern.
 
 ```
 /setup          /scrape              /apply <url>
@@ -80,10 +80,12 @@ cd ai-job-search
 
 ### 2. Install job search tools
 
+For a UK-first setup, install the country-agnostic CLIs (`linkedin-search`, `freehire-search`) first. The Danish demo CLIs are optional and remain available as transparent examples.
+
 PowerShell:
 
 ```powershell
-$tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search", "linkedin-search", "freehire-search")
+$tools = @("linkedin-search", "freehire-search")
 foreach ($tool in $tools) {
   Push-Location ".agents/skills/$tool/cli"
   bun install
@@ -94,12 +96,20 @@ foreach ($tool in $tools) {
 Bash / zsh / Git Bash:
 
 ```bash
-for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search linkedin-search freehire-search; do
+for tool in linkedin-search freehire-search; do
   (cd .agents/skills/$tool/cli && bun install)
 done
 ```
 
 For `linkedin-search` and `freehire-search` the install is optional: both have zero runtime dependencies and run with plain `bun`; `bun install` only pulls TypeScript dev types.
+
+If you also want the Danish demo CLIs installed locally:
+
+```bash
+for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search; do
+  (cd .agents/skills/$tool/cli && bun install)
+done
+```
 
 ### 3. Set up your profile
 
@@ -304,7 +314,7 @@ For **UK-first** (and still country-agnostic) starting points, the repo ships tw
 - **`linkedin-search`** — built on LinkedIn's public, unauthenticated `jobs-guest` endpoints. Field-agnostic, **zero runtime dependencies** (runs with just `bun`), and takes the search location as an explicit flag, so it works for any market out of the box (`-l "Berlin, Germany"`, `-l "Mumbai, Maharashtra, India"`, `-l "Remote"`, …). Intended for **personal use only** — automated access is against LinkedIn's Terms of Service, so keep volume low. See `.agents/skills/linkedin-search/SKILL.md`.
 - **`freehire-search`** — queries the [freehire.me](https://freehire.me) aggregator's public REST API (JSON, no API key). Tech-focused (software, data, engineering, DevOps, remote), multi-market via facet flags (`--region`, `--country`, `--remote`), and **zero runtime dependencies**. Unlike the HTML-scraping Danish portals, results come back structured (skills, seniority, category). The backend is MIT-licensed and [self-hostable](https://github.com/strelov1/freehire) — point `FREEHIRE_API_URL` at your own instance if you prefer. See `.agents/skills/freehire-search/SKILL.md`.
 
-Then add UK-specific boards with `/add-portal` (common choices: Indeed UK, Reed, Totaljobs, CV-Library, Adzuna, Find a Job, Civil Service Jobs, NHS Jobs).
+Then add UK-specific boards with `/add-portal` (common choices: Indeed UK, Reed, Totaljobs, CV-Library, Adzuna).
 
 ### Extending the framework: portals, templates, criteria - and borrowing from other forks
 

@@ -163,10 +163,12 @@ Or manually: fork on GitHub, then clone your fork.
 ## 3. Install job search CLI dependencies
 Run these from the repository root.
 
+For a UK-first setup, install the country-agnostic CLIs (`linkedin-search`, `freehire-search`) first. The Danish portal CLIs are optional demos and can be installed separately.
+
 - PowerShell:
 
 ```powershell
-$tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search", "linkedin-search", "freehire-search")
+$tools = @("linkedin-search", "freehire-search")
 foreach ($tool in $tools) {
   Push-Location ".agents/skills/$tool/cli"
   bun install
@@ -176,14 +178,35 @@ foreach ($tool in $tools) {
 
 - Bash / zsh / Git Bash:
 ```bash
-for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search linkedin-search freehire-search; do
+for tool in linkedin-search freehire-search; do
   (cd .agents/skills/$tool/cli && bun install)
 done
 ```
 
 For `linkedin-search` and `freehire-search` the install is optional: both have zero runtime dependencies and run with plain `bun`; `bun install` only pulls TypeScript dev types.
 
-If you're in the UK (or any non-Danish market), you can generate equivalent search skills for your local job boards with `/add-portal` — it scaffolds the same CLI structure for any public portal and test-runs a live query before registering. In the UK, common targets include Indeed UK, Reed, Totaljobs, CV-Library, Adzuna, Find a Job, Civil Service Jobs, and NHS Jobs. See the "Job search tools" section in the README.
+If you also want the Danish demo CLIs installed locally:
+
+- PowerShell:
+
+```powershell
+$tools = @("jobbank-search", "jobdanmark-search", "jobindex-search", "jobnet-search")
+foreach ($tool in $tools) {
+  Push-Location ".agents/skills/$tool/cli"
+  bun install
+  Pop-Location
+}
+```
+
+- Bash / zsh / Git Bash:
+
+```bash
+for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search; do
+  (cd .agents/skills/$tool/cli && bun install)
+done
+```
+
+For UK board coverage, generate equivalent search skills with `/add-portal` — it scaffolds the same CLI structure for any public portal and test-runs a live query before registering. Common UK targets: Indeed UK, Reed, Totaljobs, CV-Library, Adzuna. See the "Job search tools" section in the README.
 
 ## 4. Run the setup interview
 
